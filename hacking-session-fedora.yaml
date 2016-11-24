@@ -2,14 +2,21 @@ metadata:
     name: hacking-session-fedora
     format: "Lava-Test-Shell Test Definition 1.0"
     description: "SSH Hacking Session"
+
 params:
     PUB_KEY: None
-    GATEWAY: 10.0.0.1
+    IRC_SERVER: irc.freenode.net
+
 install:
     deps:
         - openssh-server
         - net-tools
+        - wget
+
 run:
     steps:
         - ./setup_session_fedora "$PUB_KEY"
+        - export IRC_SERVER
+        - export IRC_USER
+        - export NOTIFY_URL
         - ./invoke_session_fedora "$GATEWAY"

@@ -6,9 +6,20 @@ cp stop_hacking_fedora /bin/stop_hacking
 chmod a+x invoke_session_fedora
 cp invoke_session_fedora /bin/invoke_session
 
-mkdir -p ~/.ssh/
+mkdir -m 700 -p ~/.ssh/
 echo $1 >> ~/.ssh/authorized_keys
+if [ $? -ne 0 ]; then
+    lava-test-case public-key-installed --result fail
+fi
+chmod 600 ~/.ssh/authorized_keys
 echo "Public Key Installed: $1"
+lava-test-case public-key-installed --result pass
 
-service sshd restart
-echo "sshd re-started"
+systemctl restart sshd
+if [ $? -eq 0 ]; then
+    lava-test-case sshd-restart --result pass
+    echo "sshd re-started"
+else
+    lava-test-case sshd-restart --result fail
+    echo "sshd re-start failed"
+fi

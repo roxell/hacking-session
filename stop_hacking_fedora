@@ -1,4 +1,4 @@
 #!/bin/bash
-rm /run/hacking/hacking.pid
-rm ~/.ssh/authorized_keys
-service sshd stop
+rm -f /run/hacking/hacking.pid
+rm -f ~/.ssh/authorized_keys
+systemctl stop sshd
