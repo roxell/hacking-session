@@ -13,7 +13,7 @@ ip_addr=$(ifconfig `ip route get $gateway | cut -d ' ' -f3` | grep 'inet ' | awk
 hostname=$(cat /etc/hostname)
 
 # Set the PATH to use the LAVA api
-echo "export PATH=/lava/bin/:$PATH" > ~/.bashrc
+echo "export PATH=/lava/bin/:$PATH" >> ~/.bashrc
 
 echo ""
 echo ""

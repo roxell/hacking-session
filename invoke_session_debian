@@ -20,7 +20,7 @@ ip_addr=$(ip route get $gateway | awk '/src/{print $NF}')
 hostname=$(cat /etc/hostname)
 
 # Set the PATH to use the LAVA api
-echo "export PATH=/lava/bin/:$PATH" > ~/.bashrc
+echo "export PATH=/lava/bin/:$PATH" >> ~/.bashrc
 
 # Are we running under sudo for the real user?
 if [ -z "${SUDO_USER}" ]; then
