@@ -36,7 +36,6 @@ else
 fi
 
 /etc/init.d/ssh restart
-echo "sshd re-started"
 if [ $? -eq 0 ]; then
     lava-test-case sshd-restart --result pass
     echo "sshd re-started"
