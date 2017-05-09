@@ -18,16 +18,18 @@ echo $1 >> ~/.ssh/authorized_keys
 if [ $? -ne 0 ]; then
     lava-test-case public-key-installed --result fail
 fi
+chmod 0755 ~/.ssh
 chmod 0600 ~/.ssh/authorized_keys
 echo "Public Key Installed: $1"
 lava-test-case public-key-installed --result pass
 
 # Account for running under sudo
-if [ ! -z "${SUDO_USER}" ]; then
+if [ ! -z "${SUDO_USER}" -a -z "${container}" ]; then
     echo "Fixing up ${HOME}/.ssh permissions to ${SUDO_USER}:${SUDO_GID}"
     chown -R ${SUDO_USER}:${SUDO_GID} ${HOME}/.ssh
 fi
 
+# Change SSHD log level to DEBUG
 grep -P "^LogLevel" /etc/ssh/sshd_config
 if [ $? -eq 0 ]; then
     sed -i "s/^LogLevel\ [A-Z]\+/LogLevel\ DEBUG/g" /etc/ssh/sshd_config

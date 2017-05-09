@@ -29,6 +29,11 @@ else
     REAL_USER=${SUDO_USER}
 fi
 
+# override for LXC
+if [ -n "$container" ]; then
+	REAL_USER='root'
+fi
+
 SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${REAL_USER}@${ip_addr}"
 echo "*******************************************************************************************************"
 echo "* REAL_USER=${REAL_USER}, USER=${USER}, SUDO_USER=${SUDO_USER}"
