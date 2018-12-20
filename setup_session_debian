@@ -32,12 +32,13 @@ if [ ! -z "${SUDO_USER}" -a -z "${container}" ]; then
 fi
 
 APTOPTS="-q -y install --no-install-recommends -o Dpkg::Options::=--force-confold"
-
+# necessary packages to get sshd and https:// operating.
+PKGS="openssh-server netcat-traditional wget ca-certificates"
 export DEBIAN_FRONTEND=noninteractive
 unset LANG
 unset LANGUAGE
 command 'update-apt' "apt-get update -q"
-command 'install-packages' "apt-get ${APTOPTS} openssh-server netcat-traditional wget"
+command 'install-packages' "apt-get ${APTOPTS} ${PKGS}"
 
 # Change SSHD log level to DEBUG
 grep -P "^LogLevel" /etc/ssh/sshd_config
