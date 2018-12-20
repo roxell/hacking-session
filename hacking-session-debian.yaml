@@ -2,19 +2,15 @@ metadata:
   name: hacking-session-debian
   format: "Lava-Test-Shell Test Definition 1.0"
   description: "SSH Hacking Session"
-  version: 1.0
+  version: 2.0
 
 params:
     PUB_KEY: None
     IRC_SERVER: irc.freenode.net
 
-install:
-    deps:
-        - openssh-server
-        - netcat-traditional
-        - wget
 run:
     steps:
+        # package installation is included in setup_session_debian
         - ./setup_session_debian "$PUB_KEY"
         - export IRC_SERVER
         - export IRC_USER

@@ -1,6 +1,8 @@
 #!/bin/bash
 # Usage ./setup_session <pub_key>
 
+. ./testdefs/lava-common
+
 chmod a+x stop_hacking_debian
 cp stop_hacking_debian /bin/stop_hacking
 chmod a+x continue_hacking
@@ -28,6 +30,14 @@ if [ ! -z "${SUDO_USER}" -a -z "${container}" ]; then
     echo "Fixing up ${HOME}/.ssh permissions to ${SUDO_USER}:${SUDO_GID}"
     chown -R ${SUDO_USER}:${SUDO_GID} ${HOME}/.ssh
 fi
+
+APTOPTS="-q -y install --no-install-recommends -o Dpkg::Options::=--force-confold"
+
+export DEBIAN_FRONTEND=noninteractive
+unset LANG
+unset LANGUAGE
+command 'update-apt' "apt-get update -q"
+command 'install-packages' "apt-get ${APTOPTS} openssh-server netcat-traditional wget"
 
 # Change SSHD log level to DEBUG
 grep -P "^LogLevel" /etc/ssh/sshd_config

@@ -1,0 +1,71 @@
+device_type: beaglebone-black
+
+# When the test action or the job times out, the hacking session
+# will end without warning.
+
+job_name: nfs-bbb-hacking
+timeouts:
+  # maximum time for the entire job, including hacking.
+  job:
+    minutes: 45
+  action:
+    minutes: 5
+priority: medium
+visibility: public
+
+metadata:
+  source: http://git.linaro.org/lava-team/hacking-session.git
+  path: debian-hacking-example.yaml
+  build-readme: http://files.lavasoftware.org/components/lava/standard/debian/stretch/armhf/3/debian-stretch-armmp-armhf-readme.html
+  build-console: https://ci.linaro.org/view/lava-ci/job/lava-debian-stretch-armmp-armhf/3/console
+  build-script: http://files.lavasoftware.org/components/lava/standard/debian/stretch/armhf/3/armmp-nfs.sh
+
+actions:
+- deploy:
+    timeout:
+      minutes: 4
+    to: tftp
+    kernel:
+      url: http://files.lavasoftware.org/components/lava/standard/debian/stretch/armhf/3/vmlinuz-4.9.0-4-armmp
+      sha256sum: b6043cc5a07e2cead3f7f098018e7706ea7840eece2a456ba5fcfaddaf98a21e
+      type: zimage
+    ramdisk:
+      url: http://files.lavasoftware.org/components/lava/standard/debian/stretch/armhf/3/initrd.img-4.9.0-4-armmp
+      sha256sum: 4cc25f499ae74e72b5d74c9c5e65e143de8c2e3b019f5d1781abbf519479b843
+      compression: gz
+    modules:
+      url: http://files.lavasoftware.org/components/lava/standard/debian/stretch/armhf/3/modules.tar.gz
+      sha256sum: 10e6930e9282dd44905cfd3f3a2d5a5058a1d400374afb2619412554e1067d58
+      compression: gz
+    nfsrootfs:
+      url: https://files.lavasoftware.org/components/lava/standard/debian/stretch/armhf/3/stretch-armhf-nfs.tar.gz
+      sha256sum: 46d18f339ac973359e8ac507e5258b620709add94cf5e09a858d936ace38f698
+      compression: gz
+    dtb:
+      url: http://files.lavasoftware.org/components/lava/standard/debian/stretch/armhf/3/dtbs/am335x-boneblack.dtb
+      sha256sum: c4c461712bf52af7d020e78678e20fc946f1d9b9552ef26fd07ae85c5373ece9
+
+- boot:
+   timeout:
+     minutes: 3
+   method: u-boot
+   commands: nfs
+   type: bootz
+    auto_login:
+      login_prompt: 'login:'
+      username: root
+    prompts:
+    - 'root@stretch:'
+
+- test:
+   # maximum time available for hacking.
+   timeout:
+     minutes: 30
+   definitions:
+   - repository: http://git.linaro.org/lava-team/hacking-session.git
+     from: git
+     path: hacking-session-debian.yaml
+     name: hacking
+     parameters:
+       IRC_USER: ""
+       PUB_KEY: ""
