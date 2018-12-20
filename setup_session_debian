@@ -1,7 +1,7 @@
 #!/bin/bash
 # Usage ./setup_session <pub_key>
 
-. ./testdefs/lava-common
+. ./lava-common
 
 chmod a+x stop_hacking_debian
 cp stop_hacking_debian /bin/stop_hacking
