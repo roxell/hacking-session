@@ -12,6 +12,7 @@ echo "Target's Gateway: $gateway"
 
 # Copy invoke session
 cp /bin/invoke_session /etc/init.d/invoke_session
+systemctl restart sshd
 
 # Obtain target IP and Hostname
 ip_addr=$(ifconfig `ip route get $gateway | cut -d ' ' -f3` | grep 'inet addr' |awk -F: '{split($2,a," "); print a[1] }')
