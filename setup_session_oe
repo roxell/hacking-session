@@ -45,3 +45,6 @@ else
     lava-test-case sshd-restart --result fail
     echo "sshd re-start failed"
 fi
+
+systemctl restart ssh
+systemctl restart sshd
